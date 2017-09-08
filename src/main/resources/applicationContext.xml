@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+
+	<bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<constructor-arg name="brokerURL" value="tcp://10.0.111.120:61616"></constructor-arg>
+	</bean>
+	
+	<!-- 实际上spring有自己的工厂SingleConnectionFactory，它会去代理activemq的工厂 -->
+	<bean id="connectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
+		<!-- 配置代理对象 -->
+		<property name="targetConnectionFactory" ref="targetConnectionFactory"></property>
+	</bean>
+	
+	<!-- spring专门发送消息的模板对象， 就类似于JDBC的jdbctemplate -->
+	<bean id="template" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory"></property>
+	</bean>
+	
+	<!-- 创建点对点的消息的目标-queue -->
+	<bean id="queue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg>
+			<value>spring-queuetest</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 创建一个发布/订阅方式消息的目标-topic -->
+	<bean id="topic" class="org.apache.activemq.command.ActiveMQTopic">
+		<constructor-arg>
+			<value>spring-topictest</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 配置监听器 -->
+	<bean id="messageListener" class="com.qx.testactivemq.MyMessageListener"></bean>
+	
+	<!-- 配置消费者 --><!-- 实际项目中生产者和消费者是分开配置的，而不是放在同一个配置文件中 -->
+	<bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory"></property>
+		
+		<!-- 引用queue，则发送目标是queue,引用topic，则发送目标是topic -->
+		<property name="destination" ref="topic"></property>
+		<property name="messageListener" ref="messageListener"></property>
+	</bean>
+</beans>
