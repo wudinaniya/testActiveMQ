@@ -37,6 +37,12 @@ ActiveMQ 是Apache出品，最流行的，能力强劲的开源消息总线。Ac
 ### 其他
 spring配置文件中：
 若构造方法中只有一个参数时，可以不写name，直接写<value>标签，传一个参数过来就行了。
+![](http://img.blog.csdn.net/20170909144609071?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvd3VkaW5hbml5YQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
+
+![](http://img.blog.csdn.net/20170909144644849?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvd3VkaW5hbml5YQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
 
 ActiveMQQueue的构造方法中只有一个参数，因此在spring中配置时可有两种写法
 
+
+
+对应博客链接地址  <http://blog.csdn.net/wudinaniya/article/details/77914993>
